@@ -14,9 +14,10 @@ var Snake = function (startPos) {
 
 Snake.prototype.move = function () {
 	this.direction = this.nextDirection;
-	if (this.direction === null) return;
+	if (this.direction === null) { return; }
 	var step = STEPS[this.direction];
-	var nextStep = [this.segments[0][0] + step[0], this.segments[0][1] + step[1]];
+	var nextStep = [this.segments[0][0] + step[0],
+	  this.segments[0][1] + step[1]];
 	this.segments.pop();
 	this.segments.unshift(nextStep);
 };
@@ -32,17 +33,19 @@ Snake.prototype.isCollidedSelf = function () {
 	for (var i = 1; i < this.segments.length; i++) {
 		if (head[0] === this.segments[i][0] &&
 		  head[1] === this.segments[i][1]) {
-				return true;
+			return true;
 		}
 	}
 	return false;
 };
 
 Snake.prototype.turn = function (direction) {
-	var currentStep = STEPS[this.direction] || [-2, -2]; // never happens
+	// give a value guaranteed to evaluate false if direction is null
+	var currentStep = STEPS[this.direction] || [-2, -2];
 	var newStep = STEPS[direction];
-
-	if (currentStep[0] + newStep[0] === 0 && currentStep[1] + newStep[1] === 0) {
+	if (currentStep[0] + newStep[0] === 0 &&
+		currentStep[1] + newStep[1] === 0) {
+		// avoid turning backwards into itself
 		return;
 	}
   this.nextDirection = direction;

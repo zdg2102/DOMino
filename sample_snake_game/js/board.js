@@ -10,6 +10,9 @@ var Board = function () {
 };
 
 Board.prototype.getRandomPos = function () {
+  // margin of 1 added on each edge to make sure
+  // random position is never returned in first or
+  // last row or column
 	return [1 + Math.floor(Math.random() * (this.height - 2)),
 		1 + Math.floor(Math.random() * (this.width - 2))];
 };
@@ -23,12 +26,13 @@ Board.prototype.addApple = function () {
 };
 
 Board.prototype.isOccupied = function (pos) {
-  var occupiedSquares = this.snakeOne.segments.concat(this.snakeTwo.segments);
-	if (this.apple) occupiedSquares.concat([this.apple]);
-	for (var i = 1; i < occupiedSquares.length; i++) {
+  var occupiedSquares = this.snakeOne.segments
+    .concat(this.snakeTwo.segments);
+	if (this.apple) { occupiedSquares.concat([this.apple]); }
+	for (var i = 0; i < occupiedSquares.length; i++) {
 		if (pos[0] === occupiedSquares[i][0] &&
 			pos[1] === occupiedSquares[i][1]) {
-				return true;
+			return true;
 		}
 	}
 	return false;
@@ -38,27 +42,29 @@ Board.prototype.isSnakeHitWall = function (snake) {
 	var head = snake.segments[0];
 	if (head[0] < 0 || head[0] >= this.height ||
 		head[1] < 0 || head[1] >= this.width) {
-			return true;
+		return true;
 	}
 	return false;
 };
 
-Board.prototype.isSnakeHitOtherSnake = function (deadSnake, liveSnake) {
-	var head = deadSnake.segments[0];
-	for (var i = 1; i < liveSnake.segments.length; i++) {
-		if (head[0] === liveSnake.segments[i][0] &&
-		  head[1] === liveSnake.segments[i][1]) {
-				return true;
+Board.prototype.isSnakeHitOtherSnake = function (snakeA, snakeB) {
+	var head = snakeA.segments[0];
+	for (var i = 0; i < snakeB.segments.length; i++) {
+		if (head[0] === snakeB.segments[i][0] &&
+		  head[1] === snakeB.segments[i][1]) {
+			return true;
 		}
 	}
 	return false;
 };
 
 Board.prototype.isSnakeEatApple = function (snake) {
-	var head = snake.segments[0];
-	if (head[0] === this.apple[0] &&
-		head[1] === this.apple[1]) {
-	  return true;
+  if (this.apple) {
+    var head = snake.segments[0];
+    if (head[0] === this.apple[0] &&
+      head[1] === this.apple[1]) {
+      return true;
+    }
   }
 	return false;
 };
@@ -80,12 +86,13 @@ Board.prototype.step = function () {
 			this.snakeOne.grow(1);
 			this.addApple();
 		}
-		this.snakeOne.move();
 
 		if (this.isSnakeEatApple(this.snakeTwo)) {
 			this.snakeTwo.grow(1);
 			this.addApple();
 		}
+
+    this.snakeOne.move();
 		this.snakeTwo.move();
 	}
 };

@@ -44,80 +44,21 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Board = __webpack_require__(2);
+	var Board = __webpack_require__(1);
 	var SnakeView = __webpack_require__(3);
 	
-	$l(function () {
-	
-	  var $gameFigure = $l("figure");
+	$d(function () {
+	  var $gameFigure = $d("figure");
 		var board = new Board();
 		var view = new SnakeView(board, $gameFigure);
-	
 	});
 
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
-
-	var STEPS = {
-		N: [-1, 0],
-		E: [0, 1],
-		S: [1, 0],
-		W: [0, -1]
-	};
-	
-	var Snake = function (startPos) {
-		this.direction = null;
-		// 0 is the head, last is the tail
-		this.segments = [startPos, [startPos[0] - 1, startPos[1]]];
-		this.nextDirection = this.direction;
-	};
-	
-	Snake.prototype.move = function () {
-		this.direction = this.nextDirection;
-		if (this.direction === null) return;
-		var step = STEPS[this.direction];
-		var nextStep = [this.segments[0][0] + step[0], this.segments[0][1] + step[1]];
-		this.segments.pop();
-		this.segments.unshift(nextStep);
-	};
-	
-	Snake.prototype.grow = function (numSquares) {
-		for (var i = 0; i < numSquares; i++) {
-			this.segments.push(this.segments[this.segments.length - 1]);
-		}
-	};
-	
-	Snake.prototype.isCollidedSelf = function () {
-	  var head = this.segments[0];
-		for (var i = 1; i < this.segments.length; i++) {
-			if (head[0] === this.segments[i][0] &&
-			  head[1] === this.segments[i][1]) {
-					return true;
-			}
-		}
-		return false;
-	};
-	
-	Snake.prototype.turn = function (direction) {
-		var currentStep = STEPS[this.direction] || [-2, -2]; // never happens
-		var newStep = STEPS[direction];
-	
-		if (currentStep[0] + newStep[0] === 0 && currentStep[1] + newStep[1] === 0) {
-			return;
-		}
-	  this.nextDirection = direction;
-	};
-	
-	module.exports = Snake;
-
-
-/***/ },
-/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Snake = __webpack_require__(1);
+	var Snake = __webpack_require__(2);
 	
 	var Board = function () {
 	  this.height = 30;
@@ -129,6 +70,9 @@
 	};
 	
 	Board.prototype.getRandomPos = function () {
+	  // margin of 1 added on each edge to make sure
+	  // random position is never returned in first or
+	  // last row or column
 		return [1 + Math.floor(Math.random() * (this.height - 2)),
 			1 + Math.floor(Math.random() * (this.width - 2))];
 	};
@@ -142,12 +86,13 @@
 	};
 	
 	Board.prototype.isOccupied = function (pos) {
-	  var occupiedSquares = this.snakeOne.segments.concat(this.snakeTwo.segments);
-		if (this.apple) occupiedSquares.concat([this.apple]);
-		for (var i = 1; i < occupiedSquares.length; i++) {
+	  var occupiedSquares = this.snakeOne.segments
+	    .concat(this.snakeTwo.segments);
+		if (this.apple) { occupiedSquares.concat([this.apple]); }
+		for (var i = 0; i < occupiedSquares.length; i++) {
 			if (pos[0] === occupiedSquares[i][0] &&
 				pos[1] === occupiedSquares[i][1]) {
-					return true;
+				return true;
 			}
 		}
 		return false;
@@ -157,27 +102,29 @@
 		var head = snake.segments[0];
 		if (head[0] < 0 || head[0] >= this.height ||
 			head[1] < 0 || head[1] >= this.width) {
-				return true;
+			return true;
 		}
 		return false;
 	};
 	
-	Board.prototype.isSnakeHitOtherSnake = function (deadSnake, liveSnake) {
-		var head = deadSnake.segments[0];
-		for (var i = 1; i < liveSnake.segments.length; i++) {
-			if (head[0] === liveSnake.segments[i][0] &&
-			  head[1] === liveSnake.segments[i][1]) {
-					return true;
+	Board.prototype.isSnakeHitOtherSnake = function (snakeA, snakeB) {
+		var head = snakeA.segments[0];
+		for (var i = 0; i < snakeB.segments.length; i++) {
+			if (head[0] === snakeB.segments[i][0] &&
+			  head[1] === snakeB.segments[i][1]) {
+				return true;
 			}
 		}
 		return false;
 	};
 	
 	Board.prototype.isSnakeEatApple = function (snake) {
-		var head = snake.segments[0];
-		if (head[0] === this.apple[0] &&
-			head[1] === this.apple[1]) {
-		  return true;
+	  if (this.apple) {
+	    var head = snake.segments[0];
+	    if (head[0] === this.apple[0] &&
+	      head[1] === this.apple[1]) {
+	      return true;
+	    }
 	  }
 		return false;
 	};
@@ -199,17 +146,78 @@
 				this.snakeOne.grow(1);
 				this.addApple();
 			}
-			this.snakeOne.move();
 	
 			if (this.isSnakeEatApple(this.snakeTwo)) {
 				this.snakeTwo.grow(1);
 				this.addApple();
 			}
+	
+	    this.snakeOne.move();
 			this.snakeTwo.move();
 		}
 	};
 	
 	module.exports = Board;
+
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	var STEPS = {
+		N: [-1, 0],
+		E: [0, 1],
+		S: [1, 0],
+		W: [0, -1]
+	};
+	
+	var Snake = function (startPos) {
+		this.direction = null;
+		// 0 is the head, last is the tail
+		this.segments = [startPos, [startPos[0] - 1, startPos[1]]];
+		this.nextDirection = this.direction;
+	};
+	
+	Snake.prototype.move = function () {
+		this.direction = this.nextDirection;
+		if (this.direction === null) { return; }
+		var step = STEPS[this.direction];
+		var nextStep = [this.segments[0][0] + step[0],
+		  this.segments[0][1] + step[1]];
+		this.segments.pop();
+		this.segments.unshift(nextStep);
+	};
+	
+	Snake.prototype.grow = function (numSquares) {
+		for (var i = 0; i < numSquares; i++) {
+			this.segments.push(this.segments[this.segments.length - 1]);
+		}
+	};
+	
+	Snake.prototype.isCollidedSelf = function () {
+	  var head = this.segments[0];
+		for (var i = 1; i < this.segments.length; i++) {
+			if (head[0] === this.segments[i][0] &&
+			  head[1] === this.segments[i][1]) {
+				return true;
+			}
+		}
+		return false;
+	};
+	
+	Snake.prototype.turn = function (direction) {
+		// give a value guaranteed to evaluate false if direction is null
+		var currentStep = STEPS[this.direction] || [-2, -2];
+		var newStep = STEPS[direction];
+		if (currentStep[0] + newStep[0] === 0 &&
+			currentStep[1] + newStep[1] === 0) {
+			// avoid turning backwards into itself
+			return;
+		}
+	  this.nextDirection = direction;
+	};
+	
+	module.exports = Snake;
 
 
 /***/ },
@@ -250,7 +258,7 @@
 	};
 	
 	SnakeView.prototype.bindKeys = function () {
-		$l("body").on('keydown', this.handleKeyEvent.bind(this));
+		$d("body").on('keydown', this.handleKeyEvent.bind(this));
 	};
 	
 	SnakeView.prototype.handleKeyEvent = function (e) {
@@ -286,22 +294,26 @@
 		this.$gameFigure.find('li').removeClass();
 		for (var i = 0; i < this.board.snakeOne.segments.length; i++) {
 	    var snakeOneId = this.posToId(this.board.snakeOne.segments[i]);
-			var $snakeOneSquare = $l("#id" + snakeOneId);
+			var $snakeOneSquare = $d("#id" + snakeOneId);
 			$snakeOneSquare.addClass('snake-one-square');
 		}
 	
 		for (i = 0; i < this.board.snakeTwo.segments.length; i++) {
 	    var snakeTwoId = this.posToId(this.board.snakeTwo.segments[i]);
-			var $snakeTwoSquare = $l("#id" + snakeTwoId);
+			var $snakeTwoSquare = $d("#id" + snakeTwoId);
 			$snakeTwoSquare.addClass('snake-two-square');
 		}
 	
-		var appleId = this.posToId(this.board.apple);
-		var $appleSquare = $l('#id' + appleId);
-		$appleSquare.addClass('apple-square');
+		if (this.board.apple) {
+			var appleId = this.posToId(this.board.apple);
+			var $appleSquare = $d('#id' + appleId);
+			$appleSquare.addClass('apple-square');
+		}
 	};
 	
 	SnakeView.prototype.posToId = function (pos) {
+		// converts from grid position to the id number of the
+		// corresponding "li" element in the view
 	  return pos[0] * this.board.height + pos[1];
 	};
 	

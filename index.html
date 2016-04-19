@@ -2,50 +2,19 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>JQuery Lite</title>
+		<title>Snake</title>
 
-    <script type="text/javascript" src="./jquery_lite.js"></script>
+    <link rel="stylesheet" href="./sample_snake_game/css/main.css"
+		  media="screen" charset="utf-8">
 
-		<script type="text/javascript">
-			$l(function () {
-				var $divs = $l("div");
-				$divs.remove(".child");
+		<script type="text/javascript" src="./DOMino.js"></script>
+		<script type="text/javascript"
+		  src="./sample_snake_game/js/bundle.js"></script>
 
-				var click = function (e) {
-					alert('clicked');
-				}
-				$l('body').on('click', click);
-			});
-		</script>
 	</head>
 	<body>
 
-    <div>
-
-    </div>
-		<div class="stuff" magic="test">
-			<p>Smething</p>
-		</div>
-
-		<div class="stuff">
-			<p class="child">Something Else</p>
-		</div>
-
-		<a href="#"></a>
-		<a href="#"></a>
-
-		<article>
-
-			<div>
-
-				<p class="child">text  <span></span></p>
-			</div>
-			<div>
-
-			</div>
-
-		</article>
-
+    <figure class="snake-game"></figure>
 
 	</body>
 </html>

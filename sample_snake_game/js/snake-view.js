@@ -32,7 +32,7 @@ var SnakeView = function (board, $gameFigure) {
 };
 
 SnakeView.prototype.bindKeys = function () {
-	$l("body").on('keydown', this.handleKeyEvent.bind(this));
+	$d("body").on('keydown', this.handleKeyEvent.bind(this));
 };
 
 SnakeView.prototype.handleKeyEvent = function (e) {
@@ -68,22 +68,26 @@ SnakeView.prototype.render = function () {
 	this.$gameFigure.find('li').removeClass();
 	for (var i = 0; i < this.board.snakeOne.segments.length; i++) {
     var snakeOneId = this.posToId(this.board.snakeOne.segments[i]);
-		var $snakeOneSquare = $l("#id" + snakeOneId);
+		var $snakeOneSquare = $d("#id" + snakeOneId);
 		$snakeOneSquare.addClass('snake-one-square');
 	}
 
 	for (i = 0; i < this.board.snakeTwo.segments.length; i++) {
     var snakeTwoId = this.posToId(this.board.snakeTwo.segments[i]);
-		var $snakeTwoSquare = $l("#id" + snakeTwoId);
+		var $snakeTwoSquare = $d("#id" + snakeTwoId);
 		$snakeTwoSquare.addClass('snake-two-square');
 	}
 
-	var appleId = this.posToId(this.board.apple);
-	var $appleSquare = $l('#id' + appleId);
-	$appleSquare.addClass('apple-square');
+	if (this.board.apple) {
+		var appleId = this.posToId(this.board.apple);
+		var $appleSquare = $d('#id' + appleId);
+		$appleSquare.addClass('apple-square');
+	}
 };
 
 SnakeView.prototype.posToId = function (pos) {
+	// converts from grid position to the id number of the
+	// corresponding "li" element in the view
   return pos[0] * this.board.height + pos[1];
 };
 

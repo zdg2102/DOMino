@@ -1,57 +1,59 @@
 ;(function (root) {
 
-  root.$l = function (jqArg) {
-		if (jqArg instanceof HTMLElement) {
-			return new DOMNodeCollection([jqArg]);
+  root.$d = function (arg) {
+		if (arg instanceof HTMLElement) {
+			return new DOMNodeCollection([arg]);
 		}
 
-		if (typeof jqArg === 'string') {
-			var found = root.document.querySelectorAll(jqArg);
-			found = Array.prototype.slice.call(found);
-			return new DOMNodeCollection(found);
+		if (typeof arg === 'string') {
+			var elems = root.document.querySelectorAll(arg);
+			elems = Array.prototype.slice.call(elems);
+			return new DOMNodeCollection(elems);
 		}
 
-		if (typeof jqArg === 'function') {
-			root.document.addEventListener('DOMContentLoaded', jqArg);
+		if (typeof arg === 'function') {
+			root.document.addEventListener('DOMContentLoaded', arg);
 		}
 	};
 
-	root.$l.extend = function () {
+	root.$d.extend = function () {
 		var receivingObj = arguments[0];
 		var args = Array.prototype.slice.call(arguments, 1);
 		for (var i = 0; i < args.length; i++) {
 			for (var key in args[i]) {
-				receivingObj[key] = args[i][key];
+        if (args[i].hasOwnProperty(key)) {
+          receivingObj[key] = args[i][key];
+        }
 			}
 		}
 		return receivingObj;
 	};
 
-	root.$l.ajax = function (choices) {
-    var defaults = {
+	root.$d.ajax = function (inputOptions) {
+    var defaultOptions = {
 			type: 'GET',
 			url: "",
 			success: null,
 			error: function () {
-				console.error("An error occurred.");
+				console.error("An AJAX error occurred.");
 			},
 			complete: null,
 			contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
 			data: null
 		};
-		var options = root.$l.extend(defaults, choices);
+		var options = root.$d.extend(defaultOptions, inputOptions);
 
 		var request = new XMLHttpRequest();
 		request.open(options.type, options.url);
 		request.setRequestHeader('Content-Type', options.contentType);
 		request.onreadystatechange = function () {
 			if (request.readyState === 4) {
-				if (request.status < 400 && request.status !== 0) {
-					if (options.success) options.success(request.responseText);
+				if (request.status === 200) {
+					if (options.success) { options.success(request.responseText); }
 				} else {
-					if (options.error) options.error(request.responseText);
+					if (options.error) { options.error(request.responseText); }
 				}
-				if (options.complete) options.complete(request.responseText);
+				if (options.complete) { options.complete(request.responseText); }
 			}
 		};
 		request.send(options.data);
@@ -113,20 +115,21 @@
 	DOMNodeCollection.prototype.removeClass = function (className) {
 		if (className === undefined) {
 			this.attr('class', '');
-			return;
-		}
-		for (var i = 0; i < this.elements.length; i++) {
-			this.elements[i].classList.remove(className);
-		}
+		} else {
+      for (var i = 0; i < this.elements.length; i++) {
+        this.elements[i].classList.remove(className);
+      }
+    }
 	};
 
 	DOMNodeCollection.prototype.children = function (selector) {
 		var children = [];
 		for (var i = 0; i < this.elements.length; i++) {
-			var subChild = Array.prototype.slice.call(this.elements[i].children);
-			for (var j = 0; j < subChild.length; j++) {
-				if (subChild[j].matches(selector) || selector === undefined) {
-					children.push(subChild[j]);
+			var elemChildren =
+        Array.prototype.slice.call(this.elements[i].children);
+			for (var j = 0; j < elemChildren.length; j++) {
+				if (elemChildren[j].matches(selector) || selector === undefined) {
+					children.push(elemChildren[j]);
 				}
 			}
 		}
@@ -147,7 +150,8 @@
 	DOMNodeCollection.prototype.find = function (selector) {
     var found = [];
 		for (var i = 0; i < this.elements.length; i++) {
-			var elems = Array.prototype.slice.call(this.elements[i].querySelectorAll(selector));
+			var elems = Array.prototype.slice
+        .call(this.elements[i].querySelectorAll(selector));
 			found = found.concat(elems);
 		}
 		return new DOMNodeCollection(found);
@@ -172,6 +176,5 @@
 			this.elements[i].removeEventListener(eventName, callback);
 		}
 	};
-
 
 })(this);
