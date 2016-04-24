@@ -1,7 +1,20 @@
-body, figure, ul, li {
+body, figure, ul, li, h1, p, em, a {
 	padding: 0;
 	margin: 0;
 	border: 0;
+	font-size: inherit;
+	font-weight: inherit;
+	color: inherit;
+	font-style: inherit;
+	font-family: inherit;
+}
+
+body {
+	font-size: 16px;
+	font-family: sans-serif;
+	font-weight: normal;
+	color: black;
+	font-weight: normal;
 }
 
 .group:after {
@@ -10,11 +23,56 @@ body, figure, ul, li {
 	clear: both;
 }
 
+.content-main {
+	display: block;
+	margin: 50px auto;
+	width: 1200px;
+}
+
+.content-text {
+	display: block;
+	float: left;
+	width: 450px;
+	padding-right: 50px;
+}
+
+.content-game {
+	display: block;
+	float: right;
+	width: 700px;
+}
+
+h1 {
+	display: block;
+	font-size: 30px;
+	margin: 0px 0px 50px;
+}
+
+p {
+	font-size: 20px;
+	margin-bottom: 30px;
+}
+
+em {
+	font-weight: bold;
+}
+
+.portfolio-link {
+	display: block;
+  font-size: 16px;
+	cursor: pointer;
+	margin-bottom: 16px;
+}
+
+.portfolio-link:first-of-type {
+	margin-top: 150px;
+}
+
 ul {
 	border: 10px solid rebeccapurple;
 	width: 510px;
 	height: 510px;
-	margin: 50px auto;
+	margin: 0px auto;
 }
 
 li {
