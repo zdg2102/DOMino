@@ -19,4 +19,11 @@ DOMino adds one variable, `$d`, to the global namespace.
 
 ## AJAX Calls
 
-`$d.ajax` takes an object as an argument containing the parameters of the AJAX call.
+`$d.ajax` takes an object as an argument containing the parameters of the AJAX call. The parameters include the following options:
+* `type`: the HTTP verb of the request
+* `url`: the URL to which the request should be made
+* `data`: the data to be sent with the request
+* `success`: a function to be called if the request completes successfully
+* `error`: a function to be called if the request fails to complete successfully
+* `completion`: a function to be called upon request completion whether request succeeds or fails
+* `contentType`: sets content type header of the request, defaults to `application/x-www-form-urlencoded; charset=UTF-8`
