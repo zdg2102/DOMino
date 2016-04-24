@@ -77,21 +77,21 @@
 		this.html("");
 	};
 
-	DOMNodeCollection.prototype.append = function (arg) {
+	DOMNodeCollection.prototype.append = function (content) {
 		var i, j;
-    if (arg instanceof HTMLElement) {
+    if (content instanceof HTMLElement) {
 			for (i = 0; i < this.elements.length; i++) {
-				this.elements[i].innerHTML += arg.outerHTML;
+				this.elements[i].innerHTML += content.outerHTML;
 			}
-		} else if (arg instanceof DOMNodeCollection) {
+		} else if (content instanceof DOMNodeCollection) {
 			for (i = 0; i < this.elements.length; i++) {
-				for (j = 0; j < arg.elements.length; j++) {
-					this.elements[i].innerHTML += arg.elements[j].outerHTML;
+				for (j = 0; j < content.elements.length; j++) {
+					this.elements[i].innerHTML += content.elements[j].outerHTML;
 				}
 			}
-		} else if (typeof arg === 'string') {
+		} else if (typeof content === 'string') {
       for (i = 0; i < this.elements.length; i++) {
-				this.elements[i].innerHTML += arg;
+				this.elements[i].innerHTML += content;
 			}
 		}
 	};
