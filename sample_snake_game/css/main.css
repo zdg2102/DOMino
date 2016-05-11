@@ -1,96 +1,96 @@
 body, figure, ul, li, h1, p, em, a, div {
-	padding: 0;
-	margin: 0;
-	border: 0;
-	font-size: inherit;
-	font-weight: inherit;
-	color: inherit;
-	font-style: inherit;
-	font-family: inherit;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  font-style: inherit;
+  font-family: inherit;
 }
 
 body {
-	font-size: 16px;
-	font-family: sans-serif;
-	font-weight: normal;
-	color: black;
-	font-weight: normal;
+  font-size: 16px;
+  font-family: sans-serif;
+  font-weight: normal;
+  color: black;
+  font-weight: normal;
 }
 
 .group:after {
-	content: "";
-	display: block;
-	clear: both;
+  content: "";
+  display: block;
+  clear: both;
 }
 
 .content-main {
-	display: block;
-	margin: 50px auto;
-	width: 1200px;
+  display: block;
+  margin: 50px auto;
+  width: 1200px;
 }
 
 .content-text {
-	display: block;
-	float: left;
-	width: 450px;
-	padding-right: 50px;
+  display: block;
+  float: left;
+  width: 450px;
+  padding-right: 50px;
 }
 
 .content-game {
-	display: block;
-	float: right;
-	width: 700px;
+  display: block;
+  float: right;
+  width: 700px;
 }
 
 h1 {
-	display: block;
-	font-size: 30px;
-	margin: 0px 0px 50px;
+  display: block;
+  font-size: 30px;
+  margin: 0px 0px 50px;
 }
 
 p {
-	font-size: 20px;
-	margin-bottom: 30px;
+  font-size: 20px;
+  margin-bottom: 30px;
 }
 
 em {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 .portfolio-link {
-	display: block;
+  display: block;
   font-size: 16px;
-	cursor: pointer;
-	margin-bottom: 16px;
+  cursor: pointer;
+  margin-bottom: 16px;
 }
 
 .portfolio-link:first-of-type {
-	margin-top: 150px;
+  margin-top: 150px;
 }
 
 ul {
-	border: 10px solid rebeccapurple;
-	width: 510px;
-	height: 510px;
-	margin: 0px auto;
+  border: 10px solid rebeccapurple;
+  width: 510px;
+  height: 510px;
+  margin: 0px auto;
 }
 
 li {
-	background-color: blue;
-	list-style: none;
-	float: left;
-	width: 17px;
-	height: 17px;
+  background-color: blue;
+  list-style: none;
+  float: left;
+  width: 17px;
+  height: 17px;
 }
 
 li.snake-one-square {
-	background-color: green;
+  background-color: green;
 }
 
 li.snake-two-square {
-	background-color: pink;
+  background-color: pink;
 }
 
 li.apple-square {
-	background-color: red;
+  background-color: red;
 }
