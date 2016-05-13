@@ -79,9 +79,7 @@ Board.prototype.isGameOver = function () {
 };
 
 Board.prototype.step = function () {
-  if (this.isGameOver()) {
-    return;
-  } else {
+  if (!this.isGameOver()) {
     if (this.isSnakeEatApple(this.snakeOne)) {
       this.snakeOne.grow(1);
       this.addApple();

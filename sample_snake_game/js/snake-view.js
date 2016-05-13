@@ -1,8 +1,9 @@
+var Board = require('./board');
+
 // up is 38
 // right is 39
 // left is 37
 // down is 40
-
 var SNAKE_ONE_CODE = {
   38: "N",
   39: "E",
@@ -42,14 +43,25 @@ SnakeView.prototype.handleKeyEvent = function (e) {
   if (SNAKE_TWO_CODE[e.keyCode]) {
     this.board.snakeTwo.turn(SNAKE_TWO_CODE[e.keyCode]);
   }
+  // 32 is keycode for spacebar
+  if (this.board.isGameOver() && e.keyCode == 32) {
+    this.resetGame();
+  }
+};
+
+SnakeView.prototype.resetGame = function () {
+  this.$gameFigure.find('.restart-modal').remove();
+  this.board = new Board();
+  this.render();
+
+  this.intervalHandler = setInterval(this.step.bind(this), 75);
 };
 
 SnakeView.prototype.step = function () {
   this.board.step();
   if (this.board.isGameOver()) {
-    alert("You died!");
     window.clearInterval(this.intervalHandler);
-    return;
+    this.renderDeath();
   }
   this.render();
 };
@@ -83,6 +95,19 @@ SnakeView.prototype.render = function () {
     var $appleSquare = $d('#id' + appleId);
     $appleSquare.addClass('apple-square');
   }
+  if (this.board.isGameOver()) {
+    this.$gameFigure.append('<div class="restart-modal"></div>');
+  }
+};
+
+SnakeView.prototype.renderDeath = function () {
+  // use timeout to allow one additional frame for modal to be
+  // rendered
+  setTimeout(function () {
+    $modal = this.$gameFigure.find('.restart-modal');
+    $modal.append('<p class="restart-text">You died<br>' +
+      'Press space to play again</p>');
+  }.bind(this), 75);
 };
 
 SnakeView.prototype.posToId = function (pos) {

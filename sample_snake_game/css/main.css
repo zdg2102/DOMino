@@ -84,7 +84,7 @@ li {
 }
 
 li.snake-one-square {
-  background-color: green;
+  background-color: lightgreen;
 }
 
 li.snake-two-square {
@@ -93,4 +93,25 @@ li.snake-two-square {
 
 li.apple-square {
   background-color: red;
+}
+
+figure.snake-game {
+  position: relative;
+}
+
+div.restart-modal {
+  position: absolute;
+  left: 85px;
+  top: 0;
+  width: 530px;
+  height: 530px;
+  background-color: RGBA(0, 0, 0, 0.5);
+}
+
+p.restart-text {
+  text-align: center;
+  margin-top: 200px;
+  color: white;
+  font-size: 30px;
+  line-height: 50px;
 }
